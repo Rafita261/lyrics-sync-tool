@@ -52,12 +52,12 @@ Aucune installation. Aucun backend pour le moment. Juste un navigateur moderne.
 
 ### LRC
 
-- Compatible VLC, AIMP, foobar2000, etc.
+- Compatible AIMP, foobar2000, MusoPlayer(Mobile), etc.
 - Première ligne forcée à `00:00.00`
 
 ### SRT
 
-- Compatible lecteurs vidéo et éditeurs de sous‑titres
+- Compatible lecteurs vidéo comme VLC et éditeurs de sous‑titres
 - Durée automatique si la ligne suivante n’existe pas
 
 ---
@@ -80,6 +80,11 @@ Aucune installation. Aucun backend pour le moment. Juste un navigateur moderne.
 
 ---
 
+## Contribution
+
+Créer un Pull Request pour contibuer et y expliquer clairement votre Contribution (Correction de Bugs/ Ajouts de nouveaux fonctionnalités / Modification UI/UX / ...)
+
+
 ## 📜 Licence
 
 Libre d’utilisation pour projets personnels ou éducatifs.
@@ -89,7 +94,3 @@ Libre d’utilisation pour projets personnels ou éducatifs.
 💡 Projet pensé pour apprendre, prototyper et aller droit au but.
 
 Have fun & sync clean 🎶
-
-## Contribution
-
-Créer un Pull Request pour contibuer et y expliquer clairement votre Contribution (Correction de Bugs/ Ajouts de nouveaux fonctionnalités / Modification UI/UX / ...)

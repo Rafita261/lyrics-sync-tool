@@ -15,7 +15,7 @@
             <p style="opacity:.9">Créez des fichiers de paroles synchronisées facilement — PC recommandé pour
                 l'expérience complète.</p>
         </div>
-
+        
         <div class="content">
             <!-- Step 1 -->
             <div class="step" id="step1">
@@ -29,10 +29,8 @@
                     <input type="text" id="artistName" placeholder="Entrez l'artiste">
                 </div>
                 <button onclick="searchLyrics()">🔍 Rechercher les paroles en ligne</button>
-
                 <div id="searchResults" class="search-results" style="display:none"></div>
             </div>
-
             <!-- Step 2 -->
             <div class="step" id="step2">
                 <h2 style="color:#667eea; margin-bottom:10px">📄 Paroles</h2>
@@ -47,7 +45,6 @@
                     <input type="file" id="lyricsFile" accept=".txt" onchange="loadLyricsFile(event)">
                 </div>
             </div>
-
             <!-- Step 3 -->
             <div class="step" id="step3">
                 <h2 style="color:#667eea; margin-bottom:10px">🎧 Fichier audio / vidéo</h2>
@@ -57,11 +54,9 @@
                 </div>
                 <button onclick="startSync()">▶️ Commencer la synchronisation</button>
             </div>
-
             <!-- Sync area -->
             <div class="step sync-area" id="syncArea" style="display:none">
                 <h2 style="color:#667eea; margin-bottom:10px">🎯 Synchronisation en cours</h2>
-
                 <div class="audio-controls">
                     <audio id="audioPlayer" controls></audio>
                     <div class="controls-info">
@@ -70,12 +65,9 @@
                         <p>Ligne <span id="currentLineNumber">1</span> / <span id="totalLines">0</span></p>
                     </div>
                 </div>
-
                 <div id="status" class="status ready">Appuyez sur ESPACE pour démarrer la lecture, puis ENTRÉE à chaque
                     changement de ligne</div>
-
                 <div class="lyrics-display" id="lyricsDisplay"></div>
-
                 <div style="margin-top:12px; display:flex; gap:8px; align-items:center; flex-wrap:wrap">
                     <button onclick="resetSync()">🔄 Recommencer</button>
                     <button onclick="finishSync()">✅ Terminer</button>
@@ -85,20 +77,16 @@
                         plus immersive et simple.</div>
                 </div>
             </div>
-
             <!-- Export -->
             <div class="export-section" id="exportSection">
                 <h3 style="color:#2e7d32">💾 Export des fichiers</h3>
-
                 <div class="input-group">
                     <button onclick="exportLRC()">📥 Télécharger .LRC</button>
                     <button onclick="exportSRT()">📥 Télécharger .SRT</button>
                     <button onclick="previewLRC()">👁️ Aperçu LRC</button>
                     <button onclick="previewSRT()">👁️ Aperçu SRT</button>
                 </div>
-
                 <div id="previewArea" class="preview" style="display:none"></div>
-
                 <div style="margin-top:20px; padding:15px; background:#fff3cd; border-radius:8px;">
                     <p><strong>Note:</strong> La fusion avec FFmpeg et la recherche automatique des paroles seront
                         disponibles pour la prochaine version.</p>
@@ -106,7 +94,6 @@
             </div>
         </div>
     </div>
-
     <!-- Modal -->
     <div id="lyricsPreviewModal" class="lyrics-preview-modal">
         <div class="lyrics-preview-content">
@@ -119,7 +106,6 @@
             </div>
         </div>
     </div>
-
     <script async defer src="./script.js"></script>
 </body>
 

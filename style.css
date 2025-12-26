@@ -97,6 +97,10 @@ audio {
     padding: 30px;
     border-radius: 10px;
     min-height: 260px;
+    max-height: 400px;
+    /* Limite la hauteur pour le scroll */
+    overflow-y: auto;
+    /* Rend scrollable */
 }
 
 .lyric-line {
@@ -112,6 +116,12 @@ audio {
     color: #666;
     opacity: .5;
     font-size: .95em;
+}
+
+.lyric-line.past:hover {
+    background: rgba(102, 126, 234, 0.3);
+    color: white;
+    transform: translateY(-1px);
 }
 
 .lyric-line.current {
