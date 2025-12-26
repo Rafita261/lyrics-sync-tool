@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lyrics Sync Tool — Start LRC @ 00:00.00</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎵 Lyrics Sync Tool</h1>
+            <p style="opacity:.9">Créez des fichiers de paroles synchronisées facilement — PC recommandé pour
+                l'expérience complète.</p>
+        </div>
+
+        <div class="content">
+            <!-- Step 1 -->
+            <div class="step" id="step1">
+                <h2 style="color:#667eea; margin-bottom:10px">📝 Informations de la chanson</h2>
+                <div class="input-group">
+                    <label for="songTitle">Titre de la chanson :</label>
+                    <input type="text" id="songTitle" placeholder="Entrez le titre">
+                </div>
+                <div class="input-group">
+                    <label for="artistName">Artiste :</label>
+                    <input type="text" id="artistName" placeholder="Entrez l'artiste">
+                </div>
+                <button onclick="searchLyrics()">🔍 Rechercher les paroles en ligne</button>
+
+                <div id="searchResults" class="search-results" style="display:none"></div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="step" id="step2">
+                <h2 style="color:#667eea; margin-bottom:10px">📄 Paroles</h2>
+                <div class="input-group">
+                    <label for="lyricsText">Collez ou tapez les paroles (une ligne = une ligne) :</label>
+                    <textarea id="lyricsText"
+                        placeholder="Chaque ligne séparée (appuyez sur Entrée pour nouvelle ligne)" spellcheck="false"
+                        autocorrect="off" autocomplete="off" autocapitalize="off"></textarea>
+                </div>
+                <div class="input-group">
+                    <label for="lyricsFile">Importer un fichier texte :</label>
+                    <input type="file" id="lyricsFile" accept=".txt" onchange="loadLyricsFile(event)">
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="step" id="step3">
+                <h2 style="color:#667eea; margin-bottom:10px">🎧 Fichier audio / vidéo</h2>
+                <div class="input-group">
+                    <label for="audioFile">Sélectionnez votre fichier audio ou vidéo :</label>
+                    <input type="file" id="audioFile" accept="audio/*,video/*" onchange="loadAudio(event)">
+                </div>
+                <button onclick="startSync()">▶️ Commencer la synchronisation</button>
+            </div>
+
+            <!-- Sync area -->
+            <div class="step sync-area" id="syncArea" style="display:none">
+                <h2 style="color:#667eea; margin-bottom:10px">🎯 Synchronisation en cours</h2>
+
+                <div class="audio-controls">
+                    <audio id="audioPlayer" controls></audio>
+                    <div class="controls-info">
+                        <p><strong>ESPACE</strong> = Pause/Lecture &nbsp;|&nbsp; <strong>ENTRÉE</strong> = Marquer le
+                            début de la ligne suivante</p>
+                        <p>Ligne <span id="currentLineNumber">1</span> / <span id="totalLines">0</span></p>
+                    </div>
+                </div>
+
+                <div id="status" class="status ready">Appuyez sur ESPACE pour démarrer la lecture, puis ENTRÉE à chaque
+                    changement de ligne</div>
+
+                <div class="lyrics-display" id="lyricsDisplay"></div>
+
+                <div style="margin-top:12px; display:flex; gap:8px; align-items:center; flex-wrap:wrap">
+                    <button onclick="resetSync()">🔄 Recommencer</button>
+                    <button onclick="finishSync()">✅ Terminer</button>
+                    <button id="mobileNextBtn" onclick="markNextLineStart()" style="margin-left:8px">➡️ Ligne
+                        suivante</button>
+                    <div style="font-size:0.9em;color:#555;margin-top:8px;">Remarque : l'utilisation sur ordinateur est
+                        plus immersive et simple.</div>
+                </div>
+            </div>
+
+            <!-- Export -->
+            <div class="export-section" id="exportSection">
+                <h3 style="color:#2e7d32">💾 Export des fichiers</h3>
+
+                <div class="input-group">
+                    <button onclick="exportLRC()">📥 Télécharger .LRC</button>
+                    <button onclick="exportSRT()">📥 Télécharger .SRT</button>
+                    <button onclick="previewLRC()">👁️ Aperçu LRC</button>
+                    <button onclick="previewSRT()">👁️ Aperçu SRT</button>
+                </div>
+
+                <div id="previewArea" class="preview" style="display:none"></div>
+
+                <div style="margin-top:20px; padding:15px; background:#fff3cd; border-radius:8px;">
+                    <p><strong>Note:</strong> La fusion avec FFmpeg et la recherche automatique des paroles seront
+                        disponibles pour la prochaine version.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="lyricsPreviewModal" class="lyrics-preview-modal">
+        <div class="lyrics-preview-content">
+            <h3 id="modalTitle"></h3>
+            <p id="modalArtist" style="color:#666; margin-bottom:15px;"></p>
+            <div id="modalLyrics" class="lyrics-preview-text"></div>
+            <div class="modal-buttons">
+                <button class="btn-secondary" onclick="closeLyricsModal()">❌ Annuler</button>
+                <button onclick="acceptLyrics()">✅ Accepter ces paroles</button>
+            </div>
+        </div>
+    </div>
+
+    <script async defer src="./script.js"></script>
+</body>
+
+</html>
