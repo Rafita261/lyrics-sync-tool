@@ -2,8 +2,6 @@
 
 Outil **simple** pour synchroniser des paroles avec un fichier audio ou vidéo, puis exporter le résultat en **LRC** ou **SRT**.
 
-Aucune installation. Aucun backend pour le moment. Juste un navigateur moderne.
-
 ---
 
 ## 🚀 Fonctionnalités
@@ -18,6 +16,7 @@ Aucune installation. Aucun backend pour le moment. Juste un navigateur moderne.
   - **SRT** (vidéo / sous‑titres)
 
 - ✨ Interface propre, sans correction orthographique automatique
+- Recherche automatique des paroles dans l' Internet
 
 ---
 
@@ -25,7 +24,7 @@ Aucune installation. Aucun backend pour le moment. Juste un navigateur moderne.
 
 1. Ouvrir le fichier `index.html` dans un navigateur
 2. Renseigner **Titre** et **Artiste** (optionnel mais utile)
-3. Coller les paroles (1 ligne = 1 phrase)
+3. Rechercher les paroles et choisir parmi les proposées ou Coller les paroles (1 ligne = 1 phrase)
 4. Charger un fichier audio ou vidéo
 5. Cliquer sur **▶️ Synchroniser**
 6. Pendant la lecture :
@@ -65,7 +64,6 @@ Aucune installation. Aucun backend pour le moment. Juste un navigateur moderne.
 ## 🔮 Prochaines versions (roadmap)
 
 - 🔗 Fusion audio + paroles via **FFmpeg**
-- 🔍 Recherche automatique des paroles (API)
 - 🎤 Mode karaoké (highlight progressif)
 - 🎬 Prévisualisation vidéo
 
@@ -74,9 +72,7 @@ Aucune installation. Aucun backend pour le moment. Juste un navigateur moderne.
 ## 🧠 Notes techniques
 
 - HTML / CSS / VanillaJS
-- Aucun framework
-- Aucun tracking
-- Tout s’exécute côté client
+- Backend Flask
 
 ---
 
@@ -84,6 +80,7 @@ Aucune installation. Aucun backend pour le moment. Juste un navigateur moderne.
 
 Créer un Pull Request pour contibuer et y expliquer clairement votre Contribution (Correction de Bugs/ Ajouts de nouveaux fonctionnalités / Modification UI/UX / ...)
 
+La repo github du backend est [ici](https://github.com/Rafita261/Lyrics-Sync-Tool-Backend.git)
 
 ## 📜 Licence
 

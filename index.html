@@ -1,19 +1,16 @@
 <!DOCTYPE html>
 <html lang="fr">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lyrics Sync Tool — Start LRC @ 00:00.00</title>
     <link rel="stylesheet" href="./style.css">
 </head>
-
 <body>
     <div class="container">
         <div class="header">
             <h1>🎵 Lyrics Sync Tool</h1>
-            <p style="opacity:.9">Créez des fichiers de paroles synchronisées facilement — PC recommandé pour
-                l'expérience complète.</p>
+            <p style="opacity:.9">Créez des fichiers de paroles synchronisées facilement — PC recommandé pour l'expérience complète.</p>
         </div>
         
         <div class="content">
@@ -28,85 +25,219 @@
                     <label for="artistName">Artiste :</label>
                     <input type="text" id="artistName" placeholder="Entrez l'artiste">
                 </div>
-                <button onclick="searchLyrics()">🔍 Rechercher les paroles en ligne</button>
-                <div id="searchResults" class="search-results" style="display:none"></div>
             </div>
-            <!-- Step 2 -->
+
+            <!-- Step 2 - Paroles avec onglets -->
             <div class="step" id="step2">
-                <h2 style="color:#667eea; margin-bottom:10px">📄 Paroles</h2>
-                <div class="input-group">
-                    <label for="lyricsText">Collez ou tapez les paroles (une ligne = une ligne) :</label>
-                    <textarea id="lyricsText"
-                        placeholder="Chaque ligne séparée (appuyez sur Entrée pour nouvelle ligne)" spellcheck="false"
-                        autocorrect="off" autocomplete="off" autocapitalize="off"></textarea>
+                <h2 style="color:#667eea; margin-bottom:15px">📄 Paroles</h2>
+                
+                <!-- Tabs -->
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab('search')">🔍 Rechercher en ligne</button>
+                    <button class="tab-btn" onclick="switchTab('paste')">✍️ Coller les paroles</button>
+                    <button class="tab-btn" onclick="switchTab('upload')">📁 Uploader fichier</button>
                 </div>
-                <div class="input-group">
-                    <label for="lyricsFile">Importer un fichier texte :</label>
-                    <input type="file" id="lyricsFile" accept=".txt" onchange="loadLyricsFile(event)">
+
+                <!-- Tab: Recherche en ligne -->
+                <div class="tab-content active" id="tab-search">
+                    <div class="info-box info" style="margin-bottom:15px">
+                        <strong>💡 Astuce :</strong> Renseignez le titre et l'artiste ci-dessus pour rechercher automatiquement les paroles.
+                    </div>
+                    <button onclick="searchLyrics()" class="btn-primary">🔍 Rechercher les paroles</button>
+                    <div id="searchResults" class="search-results" style="display:none"></div>
+                </div>
+
+                <!-- Tab: Coller les paroles -->
+                <div class="tab-content" id="tab-paste">
+                    <div class="info-box info" style="margin-bottom:15px">
+                        <strong>💡 Astuce :</strong> Une ligne = une ligne de parole. Appuyez sur Entrée pour séparer chaque ligne.
+                    </div>
+                    <textarea id="lyricsText" placeholder="Collez vos paroles ici...
+Chaque ligne doit être séparée par un retour à la ligne" spellcheck="false" autocorrect="off" autocomplete="off" autocapitalize="off"></textarea>
+                </div>
+
+                <!-- Tab: Upload fichier -->
+                <div class="tab-content" id="tab-upload">
+                    <div class="info-box info" style="margin-bottom:15px">
+                        <strong>💡 Astuce :</strong> Sélectionnez un fichier .txt contenant vos paroles (une ligne par ligne de parole).
+                    </div>
+                    <div class="file-upload-area">
+                        <input type="file" id="lyricsFile" accept=".txt" onchange="loadLyricsFile(event)" style="display:none">
+                        <button onclick="$('lyricsFile').click()" class="btn-upload">
+                            📁 Choisir un fichier .txt
+                        </button>
+                        <div id="lyricsFileInfo" class="file-info"></div>
+                    </div>
                 </div>
             </div>
+
             <!-- Step 3 -->
             <div class="step" id="step3">
                 <h2 style="color:#667eea; margin-bottom:10px">🎧 Fichier audio / vidéo</h2>
-                <div class="input-group">
-                    <label for="audioFile">Sélectionnez votre fichier audio ou vidéo :</label>
-                    <input type="file" id="audioFile" accept="audio/*,video/*" onchange="loadAudio(event)">
+                <div class="info-box warning" style="margin-bottom:15px">
+                    <strong>⚠️ Limite :</strong> Taille maximale de 80 MB pour garantir un traitement optimal.
                 </div>
-                <button onclick="startSync()">▶️ Commencer la synchronisation</button>
+                <div class="file-upload-zone" onclick="$('audioFile').click()">
+                    <input type="file" id="audioFile" accept="audio/*,video/*" onchange="loadAudio(event)" style="display:none">
+                    <div class="upload-icon">🎧</div>
+                    <div class="upload-text">
+                        <strong>Cliquez pour sélectionner</strong>
+                        <span>ou glissez-déposez votre fichier audio/vidéo</span>
+                    </div>
+                </div>
+                <div id="mainAudioFileInfo" class="file-info-selected"></div>
+                <button onclick="startSync()" class="btn-primary" style="margin-top:15px">▶️ Commencer la synchronisation</button>
             </div>
+
             <!-- Sync area -->
             <div class="step sync-area" id="syncArea" style="display:none">
                 <h2 style="color:#667eea; margin-bottom:10px">🎯 Synchronisation en cours</h2>
                 <div class="audio-controls">
                     <audio id="audioPlayer" controls></audio>
                     <div class="controls-info">
-                        <p><strong>ESPACE</strong> = Pause/Lecture &nbsp;|&nbsp; <strong>ENTRÉE</strong> = Marquer le
-                            début de la ligne suivante</p>
+                        <p><strong>ESPACE</strong> = Pause/Lecture &nbsp;|&nbsp; <strong>ENTRÉE</strong> = Marquer le début de la ligne suivante</p>
                         <p>Ligne <span id="currentLineNumber">1</span> / <span id="totalLines">0</span></p>
                     </div>
                 </div>
-                <div id="status" class="status ready">Appuyez sur ESPACE pour démarrer la lecture, puis ENTRÉE à chaque
-                    changement de ligne</div>
+                <div id="status" class="status ready">Appuyez sur ESPACE pour démarrer la lecture, puis ENTRÉE à chaque changement de ligne</div>
                 <div class="lyrics-display" id="lyricsDisplay"></div>
                 <div style="margin-top:12px; display:flex; gap:8px; align-items:center; flex-wrap:wrap">
                     <button onclick="resetSync()">🔄 Recommencer</button>
                     <button onclick="finishSync()">✅ Terminer</button>
-                    <button id="mobileNextBtn" onclick="markNextLineStart()" style="margin-left:8px">➡️ Ligne
-                        suivante</button>
-                    <div style="font-size:0.9em;color:#555;margin-top:8px;">Remarque : l'utilisation sur ordinateur est
-                        plus immersive et simple.</div>
+                    <button id="mobileNextBtn" onclick="markNextLineStart()">➡️ Ligne suivante</button>
+                    <div style="font-size:0.9em;color:#555;margin-top:8px;">Remarque : l'utilisation sur ordinateur est plus immersive et simple.</div>
                 </div>
             </div>
-            <!-- Export -->
-            <div class="export-section" id="exportSection">
-                <h3 style="color:#2e7d32">💾 Export des fichiers</h3>
-                <div class="input-group">
-                    <button onclick="exportLRC()">📥 Télécharger .LRC</button>
-                    <button onclick="exportSRT()">📥 Télécharger .SRT</button>
-                    <button onclick="previewLRC()">👁️ Aperçu LRC</button>
-                    <button onclick="previewSRT()">👁️ Aperçu SRT</button>
-                </div>
-                <div id="previewArea" class="preview" style="display:none"></div>
-                <div style="margin-top:20px; padding:15px; background:#fff3cd; border-radius:8px;">
-                    <p><strong>Note:</strong> La fusion avec FFmpeg et la recherche automatique des paroles seront
-                        disponibles pour la prochaine version.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Modal -->
-    <div id="lyricsPreviewModal" class="lyrics-preview-modal">
-        <div class="lyrics-preview-content">
-            <h3 id="modalTitle"></h3>
-            <p id="modalArtist" style="color:#666; margin-bottom:15px;"></p>
-            <div id="modalLyrics" class="lyrics-preview-text"></div>
-            <div class="modal-buttons">
-                <button class="btn-secondary" onclick="closeLyricsModal()">❌ Annuler</button>
-                <button onclick="acceptLyrics()">✅ Accepter ces paroles</button>
-            </div>
-        </div>
-    </div>
-    <script async defer src="./script.js"></script>
-</body>
 
+            <!-- Export Section -->
+            <div class="export-section" id="exportSection">
+                <h3 style="color:#2e7d32; margin-bottom:15px">💾 Export et Traitement</h3>
+                
+                <!-- Export basique -->
+                <div class="export-group">
+                    <h4>📄 Fichiers de sous-titres</h4>
+                    <div class="button-group">
+                        <button onclick="exportLRC()">📥 Télécharger .LRC</button>
+                        <button onclick="exportSRT()">📥 Télécharger .SRT</button>
+                        <button onclick="previewLRC()">👁️ Aperçu LRC</button>
+                        <button onclick="previewSRT()">👁️ Aperçu SRT</button>
+                    </div>
+                    <div id="previewArea" class="preview" style="display:none"></div>
+                </div>
+
+                <!-- Fusion vidéo + sous-titres -->
+                <div class="export-group">
+                    <h4>🎬 Fusionner votre vidéo avec les sous-titres</h4>
+                    <div class="info-box warning">
+                        <strong>⚠️ Important :</strong> Le traitement peut prendre 2 minutes pour un fichier de 20MB. Assurez-vous d'avoir une connexion stable.
+                    </div>
+                    <div id="videoSourceInfo" class="source-file-info" style="display:none">
+                        <div class="source-label">📹 Fichier vidéo source :</div>
+                        <div class="source-details" id="videoSourceDetails"></div>
+                    </div>
+                    <div class="info-box info" style="margin-top:10px" id="noVideoWarning">
+                        <strong>ℹ️ Info :</strong> Si votre fichier source est une vidéo, elle sera automatiquement utilisée. Sinon, vous devrez en sélectionner une.
+                    </div>
+                    <div id="videoUploadSection" style="display:none">
+                        <div class="file-upload-zone" onclick="$('videoFileForMerge').click()" style="margin-top:12px">
+                            <input type="file" id="videoFileForMerge" accept="video/*" onchange="updateVideoFileInfo()" style="display:none">
+                            <div class="upload-icon">🎬</div>
+                            <div class="upload-text">
+                                <strong>Cliquez pour sélectionner une vidéo</strong>
+                                <span>Taille maximale : 80 MB</span>
+                            </div>
+                        </div>
+                        <div class="file-info-selected" id="videoFileInfo"></div>
+                    </div>
+                    <button onclick="mergeVideoWithSubtitles()" class="btn-primary" style="margin-top:10px">
+                        🎬 Fusionner vidéo + sous-titres
+                    </button>
+                </div>
+
+                <!-- Créer vidéo avec paroles -->
+                <div class="export-group">
+                    <h4>🎨 Créer une vidéo avec paroles animées</h4>
+                    <div class="info-box info">
+                        <strong>ℹ️ Info :</strong> Créez une vidéo pour YouTube/réseaux sociaux avec votre audio + image de fond + paroles synchronisées.
+                    </div>
+                    <div id="audioSourceInfo" class="source-file-info" style="display:none">
+                        <div class="source-label">🎵 Fichier audio source :</div>
+                        <div class="source-details" id="audioSourceDetails"></div>
+                        <button onclick="changeAudioSource()" class="btn-change">🔄 Changer l'audio</button>
+                    </div>
+                    <div id="audioUploadSection" style="display:none">
+                        <div class="file-upload-zone" onclick="$('audioFileForVideo').click()" style="margin-top:12px">
+                            <input type="file" id="audioFileForVideo" accept="audio/*" onchange="updateAudioFileInfo()" style="display:none">
+                            <div class="upload-icon">🎵</div>
+                            <div class="upload-text">
+                                <strong>Cliquez pour sélectionner un audio</strong>
+                                <span>Taille maximale : 80 MB</span>
+                            </div>
+                        </div>
+                        <div class="file-info-selected" id="audioFileInfo"></div>
+                    </div>
+                    <div class="file-upload-zone" onclick="$('backgroundImage').click()" style="margin-top:12px">
+                        <input type="file" id="backgroundImage" accept="image/*" onchange="previewBackground(event)" style="display:none">
+                        <div class="upload-icon">🖼️</div>
+                        <div class="upload-text">
+                            <strong>Cliquez pour sélectionner une image de fond</strong>
+                            <span>Recommandé : 1920x1080 • Format : JPG, PNG</span>
+                        </div>
+                    </div>
+                    <div id="bgPreview" class="bg-preview"></div>
+                    <button onclick="createLyricsVideo()" class="btn-primary">
+                        🎨 Créer vidéo avec paroles
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de progression -->
+    <div id="progressModal" class="modal" style="display:none">
+        <div class="modal-content progress-modal">
+            <div class="modal-header">
+                <h3 id="progressTitle">⏳ Traitement en cours...</h3>
+            </div>
+            <div class="modal-body">
+                <div class="progress-info">
+                    <div id="progressMessage" class="progress-message">Envoi du fichier au serveur...</div>
+                    <div class="progress-bar-container">
+                        <div id="progressBar" class="progress-bar">
+                            <span id="progressBarText"></span>
+                        </div>
+                    </div>
+                    <div class="progress-stats">
+                        <span id="progressPercent">0%</span>
+                        <span id="progressTime"></span>
+                    </div>
+                </div>
+                <div class="spinner"></div>
+                <div class="info-box warning" style="margin-top:20px">
+                    <strong>⚠️ Ne fermez pas cette page</strong> pendant le traitement. Cela peut prendre plusieurs minutes selon la taille de votre fichier.
+                </div>
+                <div class="progress-details" id="progressDetails"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de résultat -->
+    <div id="resultModal" class="modal" style="display:none">
+        <div class="modal-content result-modal">
+            <div class="modal-header">
+                <h3 id="resultTitle"></h3>
+            </div>
+            <div class="modal-body">
+                <div id="resultMessage"></div>
+                <div id="resultPreview" class="result-preview"></div>
+                <div class="modal-buttons">
+                    <button onclick="closeResultModal()" class="btn-secondary">Fermer</button>
+                    <button id="downloadResultBtn" style="display:none" class="btn-primary">📥 Télécharger</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./script.js"></script>
+</body>
 </html>
