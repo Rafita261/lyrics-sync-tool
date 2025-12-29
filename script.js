@@ -1,6 +1,6 @@
 // Configuration API
 const API_BASE_URL = 'https://lyrics-sync-tool-backend-production.up.railway.app';
-
+// API_BASE_URL = 'http://127.0.0.1:8080'
 // État global
 let lyrics = [];
 let timestamps = [];
@@ -32,10 +32,8 @@ function formatTime(seconds) {
 }
 
 function estimateProcessingTime(fileSize) {
-    // 5MB = 240 secondes (4 minutes)
-    // Donc 48 secondes par MB
     const mbSize = fileSize / (1024 * 1024);
-    const estimatedSeconds = Math.ceil(mbSize * 48);
+    const estimatedSeconds = Math.ceil(mbSize * 14);
     
     if (estimatedSeconds < 60) {
         return estimatedSeconds;
@@ -367,7 +365,7 @@ function previewBackground(event) {
 // ===== SYNCHRONISATION =====
 function startSync() {
     const lyricsText = $('lyricsText').value || '';
-    const lines = lyricsText.split('\n').map(l => l.trim()).filter(l => l !== '');
+    const lines = lyricsText.split('\n').map(l => l.trim());
     
     if (lines.length === 0) { 
         alert('❌ Veuillez entrer les paroles dans l\'onglet "Coller les paroles" ou "Uploader fichier"'); 
@@ -748,7 +746,7 @@ function showProgressModal(title, fileSize) {
     detailsElem.innerHTML = `
         <strong>Taille du fichier :</strong> ${formatFileSize(fileSize)}<br>
         <strong>Estimation :</strong> Environ ${formatTime(estimatedSeconds)} de traitement<br>
-        <strong>Note :</strong> 5 MB ≈ 4 minutes • Le temps réel peut varier selon la charge du serveur
+        <strong>Note :</strong>  Le temps réel peut varier selon la charge du serveur
     `;
     
     modal.style.display = 'flex';
